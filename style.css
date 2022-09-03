@@ -26,4 +26,12 @@ body{
     height: 100px;
     border-radius: 5%;
     background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img.card__front{
+    width: 70%;
+    fill: wheat;
 }
