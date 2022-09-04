@@ -5,25 +5,13 @@ const timerEl = document.querySelector('.timer');
 let timeleft = 5;
 let play = false;
 
-/* const countDowner = function () {
-  setInterval(() => {
-    if (timeleft <= -1) {
-      clearInterval(setInterval);
-    }
-    timerEl.textContent = `00:0${timeleft}`;
-    timeleft -= 1;
-  }, 1000);
-}; */
-
 function counter() {
   timeleft = 5;
   const ourInterval = setInterval(() => {
     if (timeleft <= 0) {
       clearInterval(ourInterval);
-      console.log('vége a számlálónak');
       play = false;
       timeleft = 5;
-      console.log(play);
       reset();
     }
     timerEl.textContent = `00:0${timeleft}`;
