@@ -2,20 +2,38 @@ import icons from './icons.js';
 
 const cardTable = document.querySelector('.cards');
 const timerEl = document.querySelector('.timer');
-let timeleft = 5;
 let play = false;
+let now;
+let ourInterval;
+
+const resetCounter = () => {
+  now = new Date();
+  now.setMilliseconds(0);
+  now.setSeconds(0);
+  now.setMinutes(0);
+  timerEl.textContent = (new Intl.DateTimeFormat('hu-HU', {
+    minute: 'numeric',
+    second: 'numeric',
+  }).format(now));
+};
+
+const makeCounterWork = () => {
+  resetCounter();
+  timerEl.textContent = (new Intl.DateTimeFormat('hu-HU', {
+    minute: 'numeric',
+    second: 'numeric',
+  }).format(now));
+};
 
 function counter() {
-  timeleft = 5;
-  const ourInterval = setInterval(() => {
-    if (timeleft <= 0) {
-      clearInterval(ourInterval);
-      play = false;
-      timeleft = 5;
-      reset();
-    }
-    timerEl.textContent = `00:0${timeleft}`;
-    timeleft -= 1;
+  let sec = 0;
+  let min = 0;
+  ourInterval = setInterval(() => {
+    if (sec > 59) now.setMinutes(min += '');
+    timerEl.textContent = (new Intl.DateTimeFormat('hu-HU', {
+      minute: 'numeric',
+      second: 'numeric',
+    }).format(now.setSeconds(sec += 1)));
   }, 1000);
 }
 
@@ -33,6 +51,10 @@ const uploadHTML = () => {
 };
 
 const checkTwoItems = (item1, item2) => item1 === item2;
+const checkIfWin = () => {
+  const cards = document.querySelectorAll('.card');
+  return Array.from(cards).every((actualCard) => actualCard.classList.contains('winner'));
+};
 
 const checkCards = function (e) {
   cardTable.addEventListener('click', (e) => {
@@ -44,7 +66,12 @@ const checkCards = function (e) {
         flippedCards.forEach((actualCard) => {
           actualCard.style.pointerEvents = 'none';
           actualCard.classList.remove('flipped');
+          actualCard.classList.add('winner');
         });
+        if (checkIfWin()) {
+          clearInterval(ourInterval);
+          setInterval(reset, 5000);
+        }
       } else {
         flippedCards.forEach((actualCard) => {
           actualCard.classList.remove('flipped');
@@ -69,11 +96,14 @@ const makeCardsWork = function () {
 const init = () => {
   makeCardsWork();
   uploadHTML();
+  makeCounterWork();
 };
 
 const reset = () => {
   document.querySelector('.cards').innerHTML = '';
-  uploadHTML()
+  uploadHTML();
+  makeCounterWork();
+  counter();
 };
 
 init();
