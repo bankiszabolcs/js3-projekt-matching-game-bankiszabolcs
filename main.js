@@ -18,7 +18,7 @@ const resetCounter = () => {
 };
 
 const makeCounterWork = () => {
-  resetCounter()
+  resetCounter();
   timerEl.textContent = (new Intl.DateTimeFormat('hu-HU', {
     minute: 'numeric',
     second: 'numeric',
@@ -27,7 +27,9 @@ const makeCounterWork = () => {
 
 function counter() {
   let sec = 0;
+  let min = 0;
   ourInterval = setInterval(() => {
+    if (sec > 59) now.setMinutes(min += '');
     timerEl.textContent = (new Intl.DateTimeFormat('hu-HU', {
       minute: 'numeric',
       second: 'numeric',
